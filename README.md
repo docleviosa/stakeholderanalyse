@@ -1,0 +1,2 @@
+# stakeholderanalyse
+Stakeholderanalyse Tool Projektmanagement
