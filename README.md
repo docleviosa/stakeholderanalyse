@@ -4,7 +4,7 @@
 
 Das Stakeholderanalyse Tool, entwickelt für das Studienprojekt im Fach Projektmanagement
 
-## Instalation
+## Installation
 
 ```bash
 # Download and Install Python Version 3.11
