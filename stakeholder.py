@@ -99,13 +99,21 @@ class StakeholderTool(tk.Tk):
             self.draw_stakeholder(stakeholder)
 
     def draw_stakeholder(self, stakeholder):
-        text_id = self.canvas.create_text(stakeholder['x'], stakeholder['y'], text=stakeholder['name'], fill="blue", font=("Arial", 10))
+        if stakeholder['attitude'] == 'positiv':
+            color = "green"
+        elif stakeholder['attitude'] == 'neutral':
+            color = "yellow"
+        elif stakeholder['attitude'] == 'negativ':
+            color = "red"
+        else:
+            color = "black"
+        text_id = self.canvas.create_text(stakeholder['x'], stakeholder['y'], text=stakeholder['name'], fill="black", font=("Arial", 12, "bold"))
         bbox = self.canvas.bbox(text_id)
         padding = 5
 
         background_id = self.canvas.create_rectangle(
             bbox[0] - padding, bbox[1] - padding, bbox[2] + padding, bbox[3] + padding,
-            fill="#B0B0B0",
+            fill=color,
             outline=""
         )
         
@@ -128,12 +136,18 @@ class StakeholderTool(tk.Tk):
         
         self.text_add = ttk.Entry(grid_frame)
         self.text_add.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
-        
+
+        options = ["positiv", "neutral", "negativ"]
+        self.combobox_add = ttk.Combobox(grid_frame, values=options, state="readonly")
+        self.combobox_add.set("Wähle eine Option")
+
+        self.combobox_add.grid(row=0, column=2, padx=5, pady=5)
+
         button_add = ttk.Button(grid_frame, text="Hinzufügen", command=self.add_stakeholder)
-        button_add.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
+        button_add.grid(row=0, column=3, padx=5, pady=5, sticky="nsew")
         
         button_import = ttk.Button(grid_frame, text="Importieren", command=self.import_stakeholder)
-        button_import.grid(row=0, column=3, padx=5, pady=5, sticky="nsew")
+        button_import.grid(row=0, column=4, padx=5, pady=5, sticky="nsew")
 
         label_remove = ttk.Label(grid_frame, text="Stakeholder entfernen")
         label_remove.grid(row=1, column=0, padx=5, pady=5, sticky="w")
@@ -142,15 +156,16 @@ class StakeholderTool(tk.Tk):
         self.text_remove.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
         
         button_remove = ttk.Button(grid_frame, text="Entfernen", command=self.remove_stakeholder)
-        button_remove.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
+        button_remove.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
         
         button_export = ttk.Button(grid_frame, text="Exportieren", command=self.export_stakeholder)
-        button_export.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
+        button_export.grid(row=1, column=4, padx=5, pady=5, sticky="nsew")
 
     def add_stakeholder(self):
         name = self.text_add.get()
         if name:
-            stakeholder = {'name': name, 'x': 150, 'y': 150}
+            attitude = self.combobox_add.get()
+            stakeholder = {'name': name, 'x': 150, 'y': 150, 'attitude':attitude}
             self.stakeholders.append(stakeholder)
             self.draw_stakeholder(stakeholder)
             self.text_add.delete(0, tk.END)
@@ -195,7 +210,7 @@ class StakeholderTool(tk.Tk):
                 break
 
         if self.selected_stakeholder:
-            self.canvas.coords(self.selected_stakeholder['background_id'], event.x - 50, event.y - 10, event.x + 50, event.y + 10)
+            self.canvas.coords(self.selected_stakeholder['background_id'], event.x - 50, event.y - 15, event.x + 50, event.y + 15)
             self.canvas.coords(self.selected_stakeholder['text_id'], event.x, event.y)
             self.selected_stakeholder['x'], self.selected_stakeholder['y'] = event.x, event.y
             self.update_table()
