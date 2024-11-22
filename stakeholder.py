@@ -44,13 +44,11 @@ class StakeholderTool(tk.Tk):
         self.table_frame = ttk.Frame(self, borderwidth=2, relief="sunken")
         self.table_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         
-        self.table = ttk.Treeview(self.table_frame, columns=("Name", "X", "Y"), show="headings")
+        self.table = ttk.Treeview(self.table_frame, columns=("Name", "Einstellung"), show="headings")
         self.table.heading("Name", text="Name")
-        self.table.heading("X", text="X")
-        self.table.heading("Y", text="Y")
+        self.table.heading("Einstellung", text="Einstellung")
         self.table.column("Name", width=100)
-        self.table.column("X", width=50)
-        self.table.column("Y", width=50)
+        self.table.column("Einstellung", width=100)
         self.table.pack(expand=True, fill="both")
 
     def update_table(self):
@@ -58,7 +56,7 @@ class StakeholderTool(tk.Tk):
         for row in self.table.get_children():
             self.table.delete(row)
         for stakeholder in self.stakeholders:
-            self.table.insert("", "end", values=(stakeholder["name"], stakeholder["x"], stakeholder["y"]))
+            self.table.insert("", "end", values=(stakeholder["name"], stakeholder["attitude"]))
 
     def draw_grid(self):
         canvas_width = self.canvas.winfo_width()
